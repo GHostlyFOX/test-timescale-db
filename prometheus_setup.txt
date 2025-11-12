@@ -1,0 +1,22 @@
+Prometheus is not designed for storing raw logs. Instead, it is a metrics-based monitoring system. The recommended approach is to parse your logs, extract key metrics, and then push these metrics to a Prometheus Pushgateway. Prometheus can then scrape the metrics from the Pushgateway.
+
+To set this up, you need to run a Prometheus Pushgateway instance. The easiest way to do this is with Docker:
+
+1.  **Run the Pushgateway using Docker:**
+    ```
+    docker run -d --name pushgateway -p 9091:9091 prom/pushgateway
+    ```
+    This command will start a Pushgateway instance that is accessible on `http://localhost:9091`.
+
+2.  **Configure Prometheus to Scrape the Pushgateway:**
+    You also need to configure your Prometheus instance to collect metrics from this Pushgateway. To do this, add the following job to your `prometheus.yml` configuration file:
+
+    ```yaml
+    scrape_configs:
+      - job_name: 'pushgateway'
+        honor_labels: true
+        static_configs:
+          - targets: ['localhost:9091']
+    ```
+
+After completing these steps, you can run the provided Python script to push metrics from your Nginx logs to the Pushgateway, and Prometheus will automatically scrape them.

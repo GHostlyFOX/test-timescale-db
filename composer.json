@@ -1,0 +1,25 @@
+{
+    "name": "nginx-log-importers/php-scripts",
+    "description": "PHP scripts to import Nginx logs into various databases.",
+    "require": {
+        "simpod/clickhouse-client": "^0.6.0",
+        "influxdata/influxdb-client-php": "^3.8",
+        "promphp/prometheus_client_php": "^2.6",
+        "promphp/prometheus_push_gateway_php": "^1.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "vlucas/phpdotenv": "^5.5",
+        "nyholm/psr7": "^1.8",
+        "php-http/guzzle7-adapter": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NginxLogImporters\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jules",
+            "email": "jules@assistant.com"
+        }
+    ]
+}

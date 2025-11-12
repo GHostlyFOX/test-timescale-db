@@ -1,0 +1,19 @@
+To set up InfluxDB for storing Nginx logs, you need to create a "bucket" to hold the data.
+
+You can do this in two ways:
+
+1. Using the InfluxDB User Interface (UI):
+   - Navigate to your InfluxDB instance (e.g., http://localhost:8086).
+   - Go to the "Data" section.
+   - Click on "Buckets" and then "Create Bucket".
+   - Name your bucket (e.g., "nginx_logs") and choose a retention policy (e.g., "30 days").
+
+2. Using the `influx` Command-Line Interface (CLI):
+   - Make sure you have the `influx` CLI installed and configured.
+   - Run the following command:
+     ```
+     influx bucket create -n nginx_logs -r 30d
+     ```
+   - This will create a bucket named "nginx_logs" with a 30-day retention period.
+
+You will also need an organization name and an API token with write permissions for this bucket. You can create these in the InfluxDB UI under the "Data" -> "API Tokens" section.
