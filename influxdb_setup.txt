@@ -1,19 +1,43 @@
-To set up InfluxDB for storing Nginx logs, you need to create a "bucket" to hold the data.
+Инструкции по настройке InfluxDB v3 Core для импорта логов Nginx.
 
-You can do this in two ways:
+InfluxDB v3 использует иную модель конфигурации по сравнению с v2. Вместо "бакетов" (buckets) теперь используются "базы данных" (databases).
 
-1. Using the InfluxDB User Interface (UI):
-   - Navigate to your InfluxDB instance (e.g., http://localhost:8086).
-   - Go to the "Data" section.
-   - Click on "Buckets" and then "Create Bucket".
-   - Name your bucket (e.g., "nginx_logs") and choose a retention policy (e.g., "30 days").
+### Шаги по настройке:
 
-2. Using the `influx` Command-Line Interface (CLI):
-   - Make sure you have the `influx` CLI installed and configured.
-   - Run the following command:
-     ```
-     influx bucket create -n nginx_logs -r 30d
-     ```
-   - This will create a bucket named "nginx_logs" with a 30-day retention period.
+1.  **Получите URL вашего хоста InfluxDB:**
+    Это адрес, по которому доступен ваш инстанс InfluxDB. Например, `http://localhost:8086` или облачный URL.
 
-You will also need an organization name and an API token with write permissions for this bucket. You can create these in the InfluxDB UI under the "Data" -> "API Tokens" section.
+2.  **Создайте базу данных (если необходимо):**
+    Вам нужна база данных для хранения логов. Если у вас ее еще нет, вы можете создать ее с помощью `influx3` CLI или через пользовательский интерфейс, если он доступен.
+    ```sh
+    influx3 database create --database-name nginx_logs
+    ```
+
+3.  **Создайте токен доступа:**
+    Для записи данных в базу данных требуется токен с правами на запись. Токены можно создавать и управлять ими через `influx3` CLI.
+    ```sh
+    # Пример создания токена с правами на запись для базы данных 'nginx_logs'
+    influx3 acl create \
+      --description "Токен для импортера логов Nginx" \
+      --permission write \
+      --database nginx_logs
+    ```
+    После выполнения этой команды вы получите токен. **Обязательно скопируйте и сохраните его**, так как вы не сможете увидеть его снова.
+
+4.  **Настройте файл `.env`:**
+    Откройте файл `.env` в корне проекта и убедитесь, что следующие переменные установлены правильно:
+    ```dotenv
+    # URL вашего инстанса InfluxDB v3
+    INFLUXDB_URL=http://localhost:8086
+
+    # Ваш сгенерированный токен доступа
+    INFLUXDB_TOKEN=YOUR_GENERATED_API_TOKEN
+
+    # Имя вашей организации (если применимо, для облачных версий)
+    INFLUXDB_ORG=YOUR_ORG
+
+    # Имя базы данных, которую вы создали
+    INFLUXDB_DATABASE=nginx_logs
+    ```
+
+После выполнения этих шагов ваш скрипт `influxdb_importer.php` будет готов к отправке данных в InfluxDB v3.

@@ -11,8 +11,8 @@ nginx_log_importers/
 ├── .env.example              # Environment variable configuration
 ├── clickhouse_setup.sql      # SQL for creating the ClickHouse table
 ├── clickhouse_importer.php   # PHP script for ClickHouse
-├── influxdb_setup.txt        # Instructions for setting up InfluxDB
-├── influxdb_importer.php     # PHP script for InfluxDB
+├── influxdb_setup.txt        # Instructions for setting up InfluxDB v3
+├── influxdb_importer.php     # PHP script for InfluxDB v3
 ├── prometheus_setup.txt      # Instructions for setting up Prometheus
 ├── prometheus_importer.php   # PHP script for Prometheus
 ├── timescaledb_setup.sql     # SQL for creating the TimescaleDB hypertable
@@ -64,14 +64,14 @@ Below are the instructions for setting up each database and running the correspo
 
 ---
 
-### B. InfluxDB
+### B. InfluxDB v3
 
 **1. Setup:**
-- Make sure you have a running InfluxDB instance (v2.x).
-- Follow the instructions in `influxdb_setup.txt` to create a bucket (e.g., `nginx_logs`), an organization, and an API token.
+- Make sure you have a running InfluxDB v3 instance.
+- Follow the instructions in `influxdb_setup.txt` to create a database and an API token.
 
 **2. Run the Importer:**
-- Update the `.env` file with your InfluxDB URL, token, organization, and bucket name.
+- Update the `.env` file with your InfluxDB v3 URL, token, organization (if applicable), and database name.
 - Run the script:
   ```bash
   php influxdb_importer.php
